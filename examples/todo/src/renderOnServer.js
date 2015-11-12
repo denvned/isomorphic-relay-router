@@ -1,7 +1,7 @@
 import GraphQLStoreChangeEmitter from 'react-relay/lib/GraphQLStoreChangeEmitter';
 import {injectNetworkLayer} from 'isomorphic-relay';
 import {
-    createIsomorphicElement,
+    IsomorphicRelayRoutingContext,
     loadAndStoreData,
 } from 'isomorphic-relay-router';
 import path from 'path';
@@ -29,10 +29,7 @@ export default (req, res, next) => {
 
         function render(data) {
             const reactOutput = ReactDOMServer.renderToString(
-                <RoutingContext
-                    {...renderProps}
-                    createElement={createIsomorphicElement}
-                />
+                <IsomorphicRelayRoutingContext {...renderProps} />
             );
             res.render(path.resolve(__dirname, '..', 'views', 'index.ejs'), {
                 preloadedData: JSON.stringify(data),

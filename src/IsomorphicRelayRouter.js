@@ -1,5 +1,15 @@
-import 'isomorphic-relay'; // load before "react-relay" to prevent "self is not defined"
+import React from 'react';
+import {Router} from 'react-router';
+import {RelayRouter} from 'react-router-relay';
+import IsomorphicRelayRoutingContext from './IsomorphicRelayRoutingContext';
 
-export {default as createIsomorphicElement} from './createIsomorphicElement'
-export {default as loadAndStoreData} from './loadAndStoreData'
-export {default as storePreloadedData} from './storePreloadedData'
+export default class IsomorphicRelayRouter extends RelayRouter {
+    render() {
+        return (
+            <Router
+                {...this.props}
+                RoutingContext={IsomorphicRelayRoutingContext}
+            />
+        );
+    }
+}

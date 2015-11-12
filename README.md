@@ -22,10 +22,10 @@ Inject a no-op batching strategy into `GraphQLStoreChangeEmitter` **on the serve
 import GraphQLStoreChangeEmitter from 'react-relay/lib/GraphQLStoreChangeEmitter';
 GraphQLStoreChangeEmitter.injectBatchingStrategy(() => {});
 ```
-When processing a request **on the server**, get `renderProps` using `match` function from *react-router* (see [here](https://github.com/rackt/react-router/blob/v1.0.0/docs/guides/advanced/ServerRendering.md)), preload data using `loadAndStoreData` from *isomorphic-relay-router*, then render React supplying `createIsomorphicElement` function to `RoutingContext` component of *react-router*, and send the React output along with the data to the client:
+When processing a request **on the server**, get `renderProps` using `match` function from *react-router* (see [here](https://github.com/rackt/react-router/blob/v1.0.0/docs/guides/advanced/ServerRendering.md)), preload data using `loadAndStoreData` from *isomorphic-relay-router*, then render React using `IsomorphicRelayRoutingContext` in place of `RelayRoutingContext`, and send the React output along with the data to the client:
 ```javascript
 import {
-  createIsomorphicElement,
+  IsomorphicRelayRoutingContext,
   loadAndStoreData,
 } from 'isomorphic-relay-router';
 
@@ -43,10 +43,7 @@ app.get('/*', (req, res, next) => {
 
     function render(data) {
       const reactOutput = ReactDOMServer.renderToString(
-        <RoutingContext
-          {...renderProps}
-          createElement={createIsomorphicElement}
-        />
+        <IsomorphicRelayRoutingContext {...renderProps} />
       );
       res.render(path.resolve(__dirname, '..', 'views', 'index.ejs'), {
         preloadedData: JSON.stringify(data),
@@ -56,10 +53,10 @@ app.get('/*', (req, res, next) => {
   });
 });
 ```
-On initial page load **in the browser**, get `renderProps` using `match` function from *react-router*, store the preloaded data in the Relay store using `storePreloadedData` from *isomorphic-relay-router*, then render React supplying `createIsomorphicElement` function to `Router` component of *react-router*:
+On initial page load **in the browser**, get `renderProps` using `match` function from *react-router*, store the preloaded data in the Relay store using `storePreloadedData` from *isomorphic-relay-router*, then render React using `IsomorphicRelayRouter` in place of `RelayRouter`:
 ```javascript
 import {
-  createIsomorphicElement,
+  IsomorphicRelayRouter,
   storePreloadedData,
 } from 'isomorphic-relay-router';
 
@@ -79,11 +76,7 @@ function render() {
   const rootElement = document.getElementById('root');
 
   ReactDOM.render(
-    <Router
-      createElement={createIsomorphicElement}
-      history={createBrowserHistory()}
-      routes={routes}
-    />,
+    <IsomorphicRelayRouter routes={routes} history={createBrowserHistory()} />,
     rootElement
   );
 }

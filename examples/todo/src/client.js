@@ -1,7 +1,10 @@
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {createIsomorphicElement, storePreloadedData} from 'isomorphic-relay-router';
+import {
+    IsomorphicRelayRouter,
+    storePreloadedData,
+} from 'isomorphic-relay-router';
 import {match, Router} from 'react-router';
 import routes from './routes';
 
@@ -21,11 +24,7 @@ function render() {
     const rootElement = document.getElementById('root');
 
     ReactDOM.render(
-        <Router
-            createElement={createIsomorphicElement}
-            history={createBrowserHistory()}
-            routes={routes}
-        />,
+        <IsomorphicRelayRouter routes={routes} history={createBrowserHistory()} />,
         rootElement
     );
 }
