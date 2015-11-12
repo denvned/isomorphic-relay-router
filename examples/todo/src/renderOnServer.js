@@ -1,4 +1,3 @@
-import './useNodeFetch'
 import GraphQLStoreChangeEmitter from 'react-relay/lib/GraphQLStoreChangeEmitter';
 import {injectNetworkLayer} from 'isomorphic-relay';
 import {
