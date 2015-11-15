@@ -1,4 +1,4 @@
-Isomorphic react-router-relay
+Isomorphic react-router-relay [![npm version][npm-badge]][npm]
 =============================
 Adds server side rendering support to [react-router-relay](https://github.com/relay-tools/react-router-relay) using [isomorphic-relay](https://github.com/denvned/isomorphic-relay).
 
@@ -10,25 +10,22 @@ Installation
 How to use
 ----------
 
-Make sure *isomorphic-relay* or *isomorphic-relay-router* modules are loaded before *react-relay* on the server, because it prevents *"self is not defined"* error (see [facebook/fbjs#47](https://github.com/facebook/fbjs/issues/47)).
+The instructions are mostly the same as presented
+[here](https://github.com/denvned/isomorphic-relay/blob/v0.3.0/README.md),
+but with few differences described below.
 
-Inject a network layer to *isomorphic-relay* (but not to Relay itself) **on the server**:
+Load *isomorphic-relay-router* module:
 ```javascript
-import {injectNetworkLayer} from 'isomorphic-relay';
-injectNetworkLayer(new Relay.DefaultNetworkLayer('http://localhost:8080/graphql'));
-```
-Inject a no-op batching strategy into `GraphQLStoreChangeEmitter` **on the server**:
-```javascript
-import GraphQLStoreChangeEmitter from 'react-relay/lib/GraphQLStoreChangeEmitter';
-GraphQLStoreChangeEmitter.injectBatchingStrategy(() => {});
-```
-When processing a request **on the server**, get `renderProps` using `match` function from *react-router* (see [here](https://github.com/rackt/react-router/blob/v1.0.0/docs/guides/advanced/ServerRendering.md)), preload data using `loadAndStoreData` from *isomorphic-relay-router*, then render React using `IsomorphicRelayRoutingContext` in place of `RelayRoutingContext`, and send the React output along with the data to the client:
-```javascript
-import {
-  IsomorphicRelayRoutingContext,
-  loadAndStoreData,
-} from 'isomorphic-relay-router';
+import IsomorphicRelay from 'isomorphic-relay-router';
+````
 
+When processing a request **on the server**, get `renderProps`
+using `match` function from *react-router*
+(see [here](https://github.com/rackt/react-router/blob/v1.0.0/docs/guides/advanced/ServerRendering.md)),
+prepare the data using `IsomorphicRouter.prepareData`,
+then render React using `IsomorphicRouter.RoutingContext` in place of `RelayRoutingContext`,
+and send the React output along with the data to the client:
+```javascript
 app.get('/*', (req, res, next) => {
   match({routes, location: req.originalUrl}, (error, redirectLocation, renderProps) => {
     if (error) {
@@ -36,15 +33,16 @@ app.get('/*', (req, res, next) => {
     } else if (redirectLocation) {
       res.redirect(302, redirectLocation.pathname + redirectLocation.search);
     } else if (renderProps) {
-      loadAndStoreData(renderProps).then(render, next);
+      IsomorphicRouter.prepareData(renderProps).then(render, next);
     } else {
       res.status(404).send('Not Found');
     }
 
     function render(data) {
       const reactOutput = ReactDOMServer.renderToString(
-        <IsomorphicRelayRoutingContext {...renderProps} />
+        <IsomorphicRouter.RoutingContext {...renderProps} />
       );
+
       res.render(path.resolve(__dirname, '..', 'views', 'index.ejs'), {
         preloadedData: JSON.stringify(data),
         reactOutput
@@ -53,35 +51,18 @@ app.get('/*', (req, res, next) => {
   });
 });
 ```
-On initial page load **in the browser**, get `renderProps` using `match` function from *react-router*, store the preloaded data in the Relay store using `storePreloadedData` from *isomorphic-relay-router*, then render React using `IsomorphicRelayRouter` in place of `RelayRouter`:
+
+Render `IsomorphicRouter.Router` instead of `IsomorphicRelay.RootContainer` **in the browser:**
 ```javascript
-import {
-  IsomorphicRelayRouter,
-  storePreloadedData,
-} from 'isomorphic-relay-router';
-
-const {pathname, search} = window.location;
-
-match({routes, location: pathname + search}, (error, redirectLocation, renderProps) => {
-  if (renderProps) {
-    const data = JSON.parse(document.getElementById('preloadedData').textContent);
-
-    storePreloadedData(renderProps, data).then(render, render);
-  } else {
-    render();
-  }
-});
-
-function render() {
-  const rootElement = document.getElementById('root');
-
-  ReactDOM.render(
-    <IsomorphicRelayRouter routes={routes} history={createBrowserHistory()} />,
+ReactDOM.render(
+    <IsomorphicRouter.Router routes={routes} history={createBrowserHistory()} />,
     rootElement
-  );
-}
+);
 ```
 
 Example
 -------
-See [here](https://github.com/denvned/isomorphic-relay-router/tree/master/examples/todo).
+See [here](examples/todo).
+
+[npm-badge]: https://img.shields.io/npm/v/isomorphic-relay-router.svg
+[npm]: https://www.npmjs.com/package/isomorphic-relay-router

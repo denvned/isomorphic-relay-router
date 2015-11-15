@@ -1,9 +1,5 @@
 import GraphQLStoreChangeEmitter from 'react-relay/lib/GraphQLStoreChangeEmitter';
-import {injectNetworkLayer} from 'isomorphic-relay';
-import {
-    IsomorphicRelayRoutingContext,
-    loadAndStoreData,
-} from 'isomorphic-relay-router';
+import IsomorphicRouter from 'isomorphic-relay-router';
 import path from 'path';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
@@ -11,7 +7,9 @@ import Relay from 'react-relay';
 import {match, RoutingContext} from 'react-router';
 import routes from './routes';
 
-injectNetworkLayer(new Relay.DefaultNetworkLayer('http://localhost:8080/graphql'));
+const GRAPHQL_URL = `http://localhost:8080/graphql`;
+
+Relay.injectNetworkLayer(new Relay.DefaultNetworkLayer(GRAPHQL_URL));
 
 GraphQLStoreChangeEmitter.injectBatchingStrategy(() => {});
 
@@ -22,14 +20,14 @@ export default (req, res, next) => {
         } else if (redirectLocation) {
             res.redirect(302, redirectLocation.pathname + redirectLocation.search);
         } else if (renderProps) {
-            loadAndStoreData(renderProps).then(render, next);
+            IsomorphicRouter.prepareData(renderProps).then(render, next);
         } else {
             res.status(404).send('Not Found');
         }
 
         function render(data) {
             const reactOutput = ReactDOMServer.renderToString(
-                <IsomorphicRelayRoutingContext {...renderProps} />
+                <IsomorphicRouter.RoutingContext {...renderProps} />
             );
             res.render(path.resolve(__dirname, '..', 'views', 'index.ejs'), {
                 preloadedData: JSON.stringify(data),

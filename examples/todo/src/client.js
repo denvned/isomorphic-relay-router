@@ -1,30 +1,17 @@
 import createBrowserHistory from 'history/lib/createBrowserHistory';
+import IsomorphicRelay from 'isomorphic-relay';
+import IsomorphicRouter from 'isomorphic-relay-router';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {
-    IsomorphicRelayRouter,
-    storePreloadedData,
-} from 'isomorphic-relay-router';
-import {match, Router} from 'react-router';
 import routes from './routes';
 
-const {pathname, search} = window.location;
+const data = JSON.parse(document.getElementById('preloadedData').textContent);
 
-match({routes, location: pathname + search}, (error, redirectLocation, renderProps) => {
-    if (renderProps) {
-        const data = JSON.parse(document.getElementById('preloadedData').textContent);
+IsomorphicRelay.injectPreparedData(data);
 
-        storePreloadedData(renderProps, data).then(render, render);
-    } else {
-        render();
-    }
-});
+const rootElement = document.getElementById('root');
 
-function render() {
-    const rootElement = document.getElementById('root');
-
-    ReactDOM.render(
-        <IsomorphicRelayRouter routes={routes} history={createBrowserHistory()} />,
-        rootElement
-    );
-}
+ReactDOM.render(
+    <IsomorphicRouter.Router routes={routes} history={createBrowserHistory()} />,
+    rootElement
+);
