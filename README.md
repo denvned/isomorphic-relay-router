@@ -16,7 +16,7 @@ but with few differences described below.
 
 Load *isomorphic-relay-router* module:
 ```javascript
-import IsomorphicRelay from 'isomorphic-relay-router';
+import IsomorphicRouter from 'isomorphic-relay-router';
 ````
 
 When processing a request **on the server**, get `renderProps`
