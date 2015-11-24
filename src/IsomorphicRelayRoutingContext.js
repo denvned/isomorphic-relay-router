@@ -3,6 +3,12 @@ import React from 'react';
 import {RelayRoutingContext} from 'react-router-relay';
 
 export default class IsomorphicRelayRoutingContext extends RelayRoutingContext {
+    static displayName = 'IsomorphicRelayRoutingContext';
+    // Static members are not inherited on <IE11. So, we have to redefine them.
+    static propTypes = RelayRoutingContext.propTypes;
+    static childContextTypes = RelayRoutingContext.childContextTypes;
+    static defaultProps = RelayRoutingContext.defaultProps;
+
     render() {
         return (
             <IsomorphicRelay.RootContainer
