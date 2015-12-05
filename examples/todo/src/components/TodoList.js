@@ -74,7 +74,6 @@ export default Relay.createContainer(TodoList, {
     }
     return {
       status: nextStatus,
-      limit: Number.MAX_SAFE_INTEGER || 9007199254740991,
     };
   },
 
@@ -82,7 +81,7 @@ export default Relay.createContainer(TodoList, {
     viewer: () => Relay.QL`
       fragment on User {
         completedCount,
-        todos(status: $status, first: $limit) {
+        todos(status: $status, first: 2147483647) {
           edges {
             node {
               id,

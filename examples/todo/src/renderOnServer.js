@@ -1,9 +1,9 @@
-import GraphQLStoreChangeEmitter from 'react-relay/lib/GraphQLStoreChangeEmitter';
 import IsomorphicRouter from 'isomorphic-relay-router';
 import path from 'path';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import Relay from 'react-relay';
+import RelayStoreData from 'react-relay/lib/RelayStoreData';
 import {match, RoutingContext} from 'react-router';
 import routes from './routes';
 
@@ -11,7 +11,7 @@ const GRAPHQL_URL = `http://localhost:8080/graphql`;
 
 Relay.injectNetworkLayer(new Relay.DefaultNetworkLayer(GRAPHQL_URL));
 
-GraphQLStoreChangeEmitter.injectBatchingStrategy(() => {});
+RelayStoreData.getDefaultInstance().getChangeEmitter().injectBatchingStrategy(() => {});
 
 export default (req, res, next) => {
     match({routes, location: req.originalUrl}, (error, redirectLocation, renderProps) => {

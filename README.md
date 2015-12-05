@@ -11,7 +11,7 @@ How to use
 ----------
 
 The instructions are mostly the same as presented
-[here](https://github.com/denvned/isomorphic-relay/blob/v0.3.0/README.md),
+[here](https://github.com/denvned/isomorphic-relay/blob/v0.4.0/README.md),
 but with few differences described below.
 
 Load *isomorphic-relay-router* module:

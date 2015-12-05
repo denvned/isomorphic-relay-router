@@ -57,17 +57,11 @@ class TodoListFooter extends React.Component {
 }
 
 export default Relay.createContainer(TodoListFooter, {
-  prepareVariables() {
-    return {
-      limit: Number.MAX_SAFE_INTEGER || 9007199254740991,
-    };
-  },
-
   fragments: {
     viewer: () => Relay.QL`
       fragment on User {
         completedCount,
-        todos(status: "completed", first: $limit) {
+        todos(status: "completed", first: 2147483647) {
           ${RemoveCompletedTodosMutation.getFragment('todos')},
         },
         totalCount,
