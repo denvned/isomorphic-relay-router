@@ -1,17 +1,12 @@
 import React from 'react';
 import {Router} from 'react-router';
 import {RelayRouter} from 'react-router-relay';
-import IsomorphicRelayRoutingContext from './IsomorphicRelayRoutingContext';
+import IsomorphicRelayRouterContext from './IsomorphicRelayRouterContext';
 
 export default class IsomorphicRelayRouter extends RelayRouter {
     static displayName = 'IsomorphicRelayRouter';
 
-    render() {
-        return (
-            <Router
-                {...this.props}
-                RoutingContext={IsomorphicRelayRoutingContext}
-            />
-        );
+    renderRouterContext(props) {
+        return <IsomorphicRelayRouterContext {...props} />;
     }
 }

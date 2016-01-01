@@ -1,4 +1,4 @@
-import createBrowserHistory from 'history/lib/createBrowserHistory';
+import { browserHistory } from 'react-router';
 import IsomorphicRelay from 'isomorphic-relay';
 import IsomorphicRouter from 'isomorphic-relay-router';
 import React from 'react';
@@ -12,6 +12,6 @@ IsomorphicRelay.injectPreparedData(data);
 const rootElement = document.getElementById('root');
 
 ReactDOM.render(
-    <IsomorphicRouter.Router routes={routes} history={createBrowserHistory()} />,
+    <IsomorphicRouter.Router routes={routes} history={browserHistory} />,
     rootElement
 );

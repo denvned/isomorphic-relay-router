@@ -23,7 +23,7 @@ When processing a request **on the server**, get `renderProps`
 using `match` function from *react-router*
 (see [here](https://github.com/rackt/react-router/blob/v1.0.0/docs/guides/advanced/ServerRendering.md)),
 prepare the data using `IsomorphicRouter.prepareData`,
-then render React using `IsomorphicRouter.RoutingContext` in place of `RelayRoutingContext`,
+then render React using `IsomorphicRouter.RouterContext` in place of `RelayRouterContext`,
 and send the React output along with the data to the client:
 ```javascript
 app.get('/*', (req, res, next) => {
@@ -40,7 +40,7 @@ app.get('/*', (req, res, next) => {
 
     function render(data) {
       const reactOutput = ReactDOMServer.renderToString(
-        <IsomorphicRouter.RoutingContext {...renderProps} />
+        <IsomorphicRouter.RouterContext {...renderProps} />
       );
 
       res.render(path.resolve(__dirname, '..', 'views', 'index.ejs'), {
@@ -55,7 +55,7 @@ app.get('/*', (req, res, next) => {
 Render `IsomorphicRouter.Router` instead of `IsomorphicRelay.RootContainer` **in the browser:**
 ```javascript
 ReactDOM.render(
-    <IsomorphicRouter.Router routes={routes} history={createBrowserHistory()} />,
+    <IsomorphicRouter.Router routes={routes} history={browserHistory} />,
     rootElement
 );
 ```

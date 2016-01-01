@@ -4,7 +4,7 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import Relay from 'react-relay';
 import RelayStoreData from 'react-relay/lib/RelayStoreData';
-import {match, RoutingContext} from 'react-router';
+import {match} from 'react-router';
 import routes from './routes';
 
 const GRAPHQL_URL = `http://localhost:8080/graphql`;
@@ -27,7 +27,7 @@ export default (req, res, next) => {
 
         function render(data) {
             const reactOutput = ReactDOMServer.renderToString(
-                <IsomorphicRouter.RoutingContext {...renderProps} />
+                <IsomorphicRouter.RouterContext {...renderProps} />
             );
             res.render(path.resolve(__dirname, '..', 'views', 'index.ejs'), {
                 preloadedData: JSON.stringify(data),
