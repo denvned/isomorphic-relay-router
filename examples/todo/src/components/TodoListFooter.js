@@ -18,13 +18,13 @@ import Relay from 'react-relay';
 
 class TodoListFooter extends React.Component {
   _handleRemoveCompletedTodosClick = () => {
-    Relay.Store.update(
+    Relay.Store.commitUpdate(
       new RemoveCompletedTodosMutation({
         todos: this.props.viewer.todos,
         viewer: this.props.viewer,
       })
     );
-  }
+  };
   render() {
     var numCompletedTodos = this.props.viewer.completedCount;
     var numRemainingTodos = this.props.viewer.totalCount - numCompletedTodos;
