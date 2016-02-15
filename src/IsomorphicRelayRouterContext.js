@@ -3,12 +3,6 @@ import React from 'react';
 import {RelayRouterContext} from 'react-router-relay';
 
 export default class IsomorphicRelayRouterContext extends RelayRouterContext {
-    static displayName = 'IsomorphicRelayRouterContext';
-    // Static members are not inherited on <IE11. So, we have to redefine them.
-    static propTypes = RelayRouterContext.propTypes;
-    static childContextTypes = RelayRouterContext.childContextTypes;
-    static defaultProps = RelayRouterContext.defaultProps;
-
     constructor(props, context) {
         super(props, context);
         if (props.routeAggregator) {
@@ -29,3 +23,7 @@ export default class IsomorphicRelayRouterContext extends RelayRouterContext {
         );
     }
 }
+
+IsomorphicRelayRouterContext.propTypes = RelayRouterContext.propTypes;
+IsomorphicRelayRouterContext.childContextTypes = RelayRouterContext.childContextTypes;
+IsomorphicRelayRouterContext.defaultProps = RelayRouterContext.defaultProps;
