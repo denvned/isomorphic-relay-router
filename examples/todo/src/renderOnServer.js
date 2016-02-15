@@ -11,8 +11,6 @@ const GRAPHQL_URL = `http://localhost:8080/graphql`;
 
 Relay.injectNetworkLayer(new Relay.DefaultNetworkLayer(GRAPHQL_URL));
 
-RelayStoreData.getDefaultInstance().getChangeEmitter().injectBatchingStrategy(() => {});
-
 export default (req, res, next) => {
     match({routes, location: req.originalUrl}, (error, redirectLocation, renderProps) => {
         if (error) {
@@ -25,9 +23,9 @@ export default (req, res, next) => {
             res.status(404).send('Not Found');
         }
 
-        function render(data) {
+        function render({data, props}) {
             const reactOutput = ReactDOMServer.renderToString(
-                <IsomorphicRouter.RouterContext {...renderProps} />
+                <IsomorphicRouter.RouterContext {...props} />
             );
             res.render(path.resolve(__dirname, '..', 'views', 'index.ejs'), {
                 preloadedData: JSON.stringify(data),

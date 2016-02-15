@@ -8,5 +8,9 @@ export default function prepareData(renderProps) {
     return IsomorphicRelay.prepareData({
         Component: routeAggregator,
         route: routeAggregator.route,
-    });
+    }).then(({data, props: {relayContext}}) => ({data, props: {
+        ...renderProps,
+        relayContext,
+        routeAggregator
+    }}));
 }

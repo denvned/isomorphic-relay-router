@@ -9,6 +9,13 @@ export default class IsomorphicRelayRouterContext extends RelayRouterContext {
     static childContextTypes = RelayRouterContext.childContextTypes;
     static defaultProps = RelayRouterContext.defaultProps;
 
+    constructor(props, context) {
+        super(props, context);
+        if (props.routeAggregator) {
+            this._routeAggregator = props.routeAggregator;
+        }
+    }
+
     render() {
         return (
             <IsomorphicRelay.RootContainer
