@@ -17,9 +17,12 @@ import React from 'react';
 import Relay from 'react-relay';
 
 class TodoList extends React.Component {
+  static contextTypes = {
+    relay: Relay.PropTypes.Environment,
+  };
   _handleMarkAllChange = (e) => {
     var complete = e.target.checked;
-    Relay.Store.commitUpdate(
+    this.context.relay.commitUpdate(
       new MarkAllTodosMutation({
         complete,
         todos: this.props.viewer.todos,

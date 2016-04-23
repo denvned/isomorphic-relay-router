@@ -2,24 +2,22 @@ import IsomorphicRelay from 'isomorphic-relay';
 import RouteAggregator from 'react-router-relay/lib/RouteAggregator';
 import render from './render';
 
-export default function prepareData(renderProps, networkLayer) {
+export default function injectPreparedData(environment, renderProps, data) {
   const routeAggregator = new RouteAggregator();
   routeAggregator.updateRoute(renderProps);
 
-  return IsomorphicRelay.prepareData(
+  return IsomorphicRelay.injectPreparedData(
+    environment,
     {
       Container: routeAggregator,
       queryConfig: routeAggregator.route,
     },
-    networkLayer
-  ).then(({ data, props: { environment, initialReadyState } }) => ({
-    data,
-    props: {
-      ...renderProps,
-      environment,
-      initialReadyState,
-      render,
-      routeAggregator,
-    },
+    data
+  ).then(({ initialReadyState }) => ({
+    ...renderProps,
+    environment,
+    initialReadyState,
+    render,
+    routeAggregator,
   }));
 }

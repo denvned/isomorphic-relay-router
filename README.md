@@ -12,21 +12,20 @@ Installation
 How to use
 ----------
 
-Don't forget to inject a network layer to Relay on the server.
+Create a Relay network layer on the server.
 And if you are using `Relay.DefaultNetworkLayer`, specify the full url to the GraphQL endpoint:
 ```javascript
 const GRAPHQL_URL = `http://localhost:8080/graphql`;
 
-Relay.injectNetworkLayer(new Relay.DefaultNetworkLayer(GRAPHQL_URL));
+const networkLayer = new Relay.DefaultNetworkLayer(GRAPHQL_URL);
 ```
 
-When processing a request **on the server**, get `renderProps`
-using `match` function from *react-router* (see
-[here](https://github.com/rackt/react-router/blob/v1.0.0/docs/guides/advanced/ServerRendering.md)),
-prepare the data using `IsomorphicRouter.prepareData`,
-then render React markup using `IsomorphicRouter.RouterContext` in place of `RelayRouterContext`
-(pass the `props` returned by  `IsomorphicRouter.prepareData`), and send the React output along with
-the data to the client:
+When processing a request **on the server**, get `renderProps` using `match` function from
+*react-router* (see
+[here](https://github.com/reactjs/react-router/blob/v2.3.0/docs/guides/ServerRendering.md)),
+prepare the data using `IsomorphicRouter.prepareData`, then render React markup using `Router` from
+*react-router* (pass the `props` returned by `IsomorphicRouter.prepareData`), and send the React
+output along with the data to the client:
 ```javascript
 import IsomorphicRouter from 'isomorphic-relay-router';
 
@@ -37,7 +36,7 @@ app.get('/*', (req, res, next) => {
     } else if (redirectLocation) {
       res.redirect(302, redirectLocation.pathname + redirectLocation.search);
     } else if (renderProps) {
-      IsomorphicRouter.prepareData(renderProps).then(render, next);
+      IsomorphicRouter.prepareData(renderProps, networkLayer).then(render, next);
     } else {
       res.status(404).send('Not Found');
     }
@@ -56,24 +55,27 @@ app.get('/*', (req, res, next) => {
 });
 ```
 
-On page load **in the browser**, inject the prepared data to the Relay store
-using `IsomorphicRelay.injectPreparedData`, then render React using `IsomorphicRouter.Router`
-in place of `RelayRouter`:
+On page load **in the browser**, create an instance of `Relay.Environment`, inject an Relay network
+layer to it. Get `renderProps` using `match` function from *react-router*, inject the prepared data
+to the Relay store using `IsomorphicRelay.injectPreparedData`, then render React using `Router` from
+*react-router* (pass the `props` returned by `IsomorphicRouter.injectPreparedData`):
 ```javascript
-import IsomorphicRelay from 'isomorphic-relay';
 import IsomorphicRouter from 'isomorphic-relay-router';
 
-const data = JSON.parse(document.getElementById('preloadedData').textContent);
+const environment = new Relay.Environment();
 
-IsomorphicRelay.injectPreparedData(data);
+environment.injectNetworkLayer(new Relay.DefaultNetworkLayer('/graphql'));
+
+const data = JSON.parse(document.getElementById('preloadedData').textContent);
 
 const rootElement = document.getElementById('root');
 
 // use the same routes object as on the server
-ReactDOM.render(
-    <IsomorphicRouter.Router routes={routes} history={browserHistory} />,
-    rootElement
-);
+match({routes, history: browserHistory}, (error, redirectLocation, renderProps) => {
+  IsomorphicRouter.injectPreparedData(environment, renderProps, data).then(props => {
+    ReactDOM.render(<Router {...props} />, rootElement);
+  });
+});
 ```
 
 Example

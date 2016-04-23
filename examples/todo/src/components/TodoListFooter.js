@@ -17,8 +17,11 @@ import React from 'react';
 import Relay from 'react-relay';
 
 class TodoListFooter extends React.Component {
+  static contextTypes = {
+    relay: Relay.PropTypes.Environment,
+  };
   _handleRemoveCompletedTodosClick = () => {
-    Relay.Store.commitUpdate(
+    this.context.relay.commitUpdate(
       new RemoveCompletedTodosMutation({
         todos: this.props.viewer.todos,
         viewer: this.props.viewer,

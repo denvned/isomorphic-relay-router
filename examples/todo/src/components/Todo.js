@@ -20,12 +20,15 @@ import Relay from 'react-relay';
 import classnames from 'classnames';
 
 class Todo extends React.Component {
+  static contextTypes = {
+    relay: Relay.PropTypes.Environment,
+  };
   state = {
     isEditing: false,
   };
   _handleCompleteChange = (e) => {
     var complete = e.target.checked;
-    Relay.Store.commitUpdate(
+    this.context.relay.commitUpdate(
       new ChangeTodoStatusMutation({
         complete,
         todo: this.props.todo,
@@ -48,12 +51,12 @@ class Todo extends React.Component {
   };
   _handleTextInputSave = (text) => {
     this._setEditMode(false);
-    Relay.Store.commitUpdate(
+    this.context.relay.commitUpdate(
       new RenameTodoMutation({todo: this.props.todo, text})
     );
   };
   _removeTodo() {
-    Relay.Store.commitUpdate(
+    this.context.relay.commitUpdate(
       new RemoveTodoMutation({todo: this.props.todo, viewer: this.props.viewer})
     );
   }

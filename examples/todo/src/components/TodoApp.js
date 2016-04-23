@@ -18,8 +18,11 @@ import React from 'react';
 import Relay from 'react-relay';
 
 class TodoApp extends React.Component {
+  static contextTypes = {
+    relay: Relay.PropTypes.Environment,
+  };
   _handleTextInputSave = (text) => {
-    Relay.Store.commitUpdate(
+    this.context.relay.commitUpdate(
       new AddTodoMutation({text, viewer: this.props.viewer})
     );
   };
