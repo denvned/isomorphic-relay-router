@@ -42,9 +42,7 @@ app.get('/*', (req, res, next) => {
     }
 
     function render({data, props}) {
-      const reactOutput = ReactDOMServer.renderToString(
-        <IsomorphicRouter.RouterContext {...props} />
-      );
+      const reactOutput = ReactDOMServer.renderToString(<Router {...props} />);
 
       res.render(path.resolve(__dirname, '..', 'views', 'index.ejs'), {
         preloadedData: JSON.stringify(data),
