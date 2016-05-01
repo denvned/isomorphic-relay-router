@@ -55,8 +55,9 @@ app.get('/*', (req, res, next) => {
 
 On page load **in the browser**, create an instance of `Relay.Environment`, inject an Relay network
 layer to it. Get `renderProps` using `match` function from *react-router*, inject the prepared data
-to the Relay store using `IsomorphicRelay.injectPreparedData`, then render React using `Router` from
-*react-router* (pass the `props` returned by `IsomorphicRouter.injectPreparedData`):
+to the Relay store using `IsomorphicRelay.injectPreparedData`, then prepare initial render using
+`IsomorphicRelay.prepareInitialRender`, and render React using `Router` from *react-router* (pass
+the `props` returned by `IsomorphicRouter.prepareInitialRender`):
 ```javascript
 import IsomorphicRouter from 'isomorphic-relay-router';
 
@@ -66,11 +67,13 @@ environment.injectNetworkLayer(new Relay.DefaultNetworkLayer('/graphql'));
 
 const data = JSON.parse(document.getElementById('preloadedData').textContent);
 
+IsomorphicRelay.injectPreparedData(environment, data);
+
 const rootElement = document.getElementById('root');
 
 // use the same routes object as on the server
 match({routes, history: browserHistory}, (error, redirectLocation, renderProps) => {
-  IsomorphicRouter.injectPreparedData(environment, renderProps, data).then(props => {
+  IsomorphicRouter.prepareInitialRender(environment, renderProps).then(props => {
     ReactDOM.render(<Router {...props} />, rootElement);
   });
 });

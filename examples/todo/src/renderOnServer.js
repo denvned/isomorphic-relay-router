@@ -2,7 +2,7 @@ import IsomorphicRouter from 'isomorphic-relay-router';
 import path from 'path';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import { match, Router } from 'react-router';
+import { match } from 'react-router';
 import Relay from 'react-relay';
 import routes from './routes';
 
@@ -11,7 +11,7 @@ const GRAPHQL_URL = `http://localhost:8080/graphql`;
 const networkLayer = new Relay.DefaultNetworkLayer(GRAPHQL_URL);
 
 export default (req, res, next) => {
-  match({ routes, location: req.originalUrl }, (error, redirectLocation, renderProps) => {
+  match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
     if (error) {
       next(error);
     } else if (redirectLocation) {

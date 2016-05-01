@@ -1,9 +1,9 @@
-import injectPreparedData from './injectPreparedData';
 import prepareData from './prepareData';
+import prepareInitialRender from './prepareInitialRender';
 import render from './render';
 
 export default {
-  injectPreparedData,
   prepareData,
+  prepareInitialRender,
   render,
 };

@@ -2,17 +2,14 @@ import IsomorphicRelay from 'isomorphic-relay';
 import QueryAggregator from 'react-router-relay/lib/QueryAggregator';
 import render from './render';
 
-export default function injectPreparedData(environment, renderProps, data) {
+export default function prepareInitialRender(environment, renderProps) {
   const queryAggregator = new QueryAggregator(renderProps);
 
-  return IsomorphicRelay.injectPreparedData(
+  return IsomorphicRelay.prepareInitialRender({
     environment,
-    {
-      Container: queryAggregator,
-      queryConfig: queryAggregator.queryConfig,
-    },
-    data
-  ).then(({ initialReadyState }) => ({
+    Container: queryAggregator,
+    queryConfig: queryAggregator.queryConfig,
+  }).then(({ initialReadyState }) => ({
     ...renderProps,
     environment,
     initialReadyState,
