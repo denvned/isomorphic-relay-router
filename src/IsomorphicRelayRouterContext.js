@@ -5,8 +5,8 @@ import RelayRouterContext from 'react-router-relay/lib/RelayRouterContext';
 export default class IsomorphicRelayRouterContext extends RelayRouterContext {
   constructor(props, context) {
     super(props, context);
-    if (props.routeAggregator) {
-      this._routeAggregator = props.routeAggregator;
+    if (props.queryAggregator) {
+      this.queryAggregator = props.queryAggregator;
     }
   }
 
@@ -14,17 +14,9 @@ export default class IsomorphicRelayRouterContext extends RelayRouterContext {
     return (
       <IsomorphicRelay.Renderer
         {...this.props}
-        Container={this._routeAggregator}
-        queryConfig={this._routeAggregator.route}
-        render={({ done, error, props, retry, stale }) => {
-          if (error) {
-            return this.renderFailure(error, retry);
-          } else if (props) {
-            return this.renderFetched(props, { done, stale });
-          } else {
-            return this.renderLoading();
-          }
-        }}
+        Container={this.queryAggregator}
+        queryConfig={this.queryAggregator.queryConfig}
+        render={this.renderCallback}
       />
     );
   }

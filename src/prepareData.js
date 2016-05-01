@@ -1,15 +1,14 @@
 import IsomorphicRelay from 'isomorphic-relay';
-import RouteAggregator from 'react-router-relay/lib/RouteAggregator';
+import QueryAggregator from 'react-router-relay/lib/QueryAggregator';
 import render from './render';
 
 export default function prepareData(renderProps, networkLayer) {
-  const routeAggregator = new RouteAggregator();
-  routeAggregator.updateRoute(renderProps);
+  const queryAggregator = new QueryAggregator(renderProps);
 
   return IsomorphicRelay.prepareData(
     {
-      Container: routeAggregator,
-      queryConfig: routeAggregator.route,
+      Container: queryAggregator,
+      queryConfig: queryAggregator.queryConfig,
     },
     networkLayer
   ).then(({ data, props: { environment, initialReadyState } }) => ({
@@ -18,8 +17,8 @@ export default function prepareData(renderProps, networkLayer) {
       ...renderProps,
       environment,
       initialReadyState,
+      queryAggregator,
       render,
-      routeAggregator,
     },
   }));
 }

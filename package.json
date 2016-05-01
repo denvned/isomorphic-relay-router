@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "babel-runtime": "^6.3.19",
-    "react-router-relay": "0.12.2"
+    "react-router-relay": "0.13.1"
   },
   "devDependencies": {
     "babel-cli": "^6.3.17",
