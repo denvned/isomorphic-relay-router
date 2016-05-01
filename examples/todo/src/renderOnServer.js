@@ -25,7 +25,7 @@ export default (req, res, next) => {
     function render({ data, props }) {
       const reactOutput = ReactDOMServer.renderToString(IsomorphicRouter.render(props));
       res.render(path.resolve(__dirname, '..', 'views', 'index.ejs'), {
-        preloadedData: JSON.stringify(data),
+        preloadedData: data,
         reactOutput
       });
     }
