@@ -23,9 +23,9 @@ const networkLayer = new Relay.DefaultNetworkLayer(GRAPHQL_URL);
 When processing a request **on the server**, get `renderProps` using `match` function from
 *react-router* (see
 [here](https://github.com/reactjs/react-router/blob/v2.3.0/docs/guides/ServerRendering.md)),
-prepare the data using `IsomorphicRouter.prepareData`, then render React markup using `Router` from
-*react-router* (pass the `props` returned by `IsomorphicRouter.prepareData`), and send the React
-output along with the data to the client:
+prepare the data using `IsomorphicRouter.prepareData`, then render React markup using
+`IsomorphicRouter.render` (pass the `props` returned by `IsomorphicRouter.prepareData`), and send
+the React output along with the data to the client:
 ```javascript
 import IsomorphicRouter from 'isomorphic-relay-router';
 
@@ -42,7 +42,7 @@ app.get('/*', (req, res, next) => {
     }
 
     function render({data, props}) {
-      const reactOutput = ReactDOMServer.renderToString(<Router {...props} />);
+      const reactOutput = ReactDOMServer.renderToString(IsomorphicRouter.render(props));
 
       res.render(path.resolve(__dirname, '..', 'views', 'index.ejs'), {
         preloadedData: JSON.stringify(data),
