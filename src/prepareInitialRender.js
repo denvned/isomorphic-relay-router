@@ -14,6 +14,6 @@ export default function prepareInitialRender(environment, renderProps, otherMidd
     environment,
     initialReadyState,
     queryAggregator,
-    render: render(otherMiddleware),
+    render: render(null, otherMiddleware),
   }));
 }

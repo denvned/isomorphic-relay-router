@@ -3,12 +3,8 @@ import { applyRouterMiddleware } from 'react-router';
 import useRelay from 'react-router-relay';
 import IsomorphicRelayRouterContext from './IsomorphicRelayRouterContext';
 
-export default function(propsOrMiddleware = []) {
-  if (propsOrMiddleware.render) {
-    return propsOrMiddleware.render(propsOrMiddleware);
-  }
-
-  return applyRouterMiddleware(...propsOrMiddleware, {
+export default function(props, otherMiddleware = []) {
+  const render = applyRouterMiddleware(...otherMiddleware, {
     renderRouterContext: (child, props) => (
       <IsomorphicRelayRouterContext {...props}>
         {child}
@@ -17,4 +13,6 @@ export default function(propsOrMiddleware = []) {
 
     renderRouteComponent: useRelay.renderRouteComponent,
   });
+
+  return (!!props) ? render(props) : render;
 }
