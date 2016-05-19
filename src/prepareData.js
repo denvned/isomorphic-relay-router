@@ -2,7 +2,7 @@ import IsomorphicRelay from 'isomorphic-relay';
 import QueryAggregator from 'react-router-relay/lib/QueryAggregator';
 import render from './render';
 
-export default function prepareData(renderProps, networkLayer) {
+export default function prepareData(renderProps, networkLayer, otherMiddleware) {
   const queryAggregator = new QueryAggregator(renderProps);
 
   return IsomorphicRelay.prepareData(
@@ -18,7 +18,7 @@ export default function prepareData(renderProps, networkLayer) {
       environment,
       initialReadyState,
       queryAggregator,
-      render,
+      render: render(otherMiddleware),
     },
   }));
 }
