@@ -18,7 +18,6 @@ export default function prepareData(renderProps, networkLayer) {
       environment,
       initialReadyState,
       queryAggregator,
-      render,
     },
   }));
 }
