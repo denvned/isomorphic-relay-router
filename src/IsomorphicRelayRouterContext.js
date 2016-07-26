@@ -14,7 +14,7 @@ export default class IsomorphicRelayRouterContext extends RelayRouterContext {
     return (
       <IsomorphicRelay.Renderer
         {...this.props}
-        Container={this.queryAggregator}
+        Container={this.queryAggregator.Container}
         queryConfig={this.queryAggregator.queryConfig}
         render={this.renderCallback}
       />
