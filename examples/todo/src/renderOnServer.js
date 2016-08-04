@@ -17,7 +17,7 @@ export default (req, res, next) => {
     } else if (redirectLocation) {
       res.redirect(302, redirectLocation.pathname + redirectLocation.search);
     } else if (renderProps) {
-      IsomorphicRouter.prepareData(renderProps, networkLayer).then(render, next);
+      IsomorphicRouter.prepareData(renderProps, networkLayer).then(render).catch(next);
     } else {
       res.status(404).send('Not Found');
     }
