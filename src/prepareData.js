@@ -1,6 +1,5 @@
 import IsomorphicRelay from 'isomorphic-relay';
 import IsomorphicQueryAggregator from './IsomorphicQueryAggregator';
-import render from './render';
 
 export default function prepareData(renderProps, networkLayer) {
   const queryAggregator = new IsomorphicQueryAggregator(renderProps);
@@ -18,7 +17,6 @@ export default function prepareData(renderProps, networkLayer) {
       environment,
       initialReadyState,
       queryAggregator,
-      render,
     },
   }));
 }
