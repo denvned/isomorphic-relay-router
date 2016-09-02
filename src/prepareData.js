@@ -1,7 +1,7 @@
 import IsomorphicRelay from 'isomorphic-relay';
 import IsomorphicQueryAggregator from './IsomorphicQueryAggregator';
 
-export default function prepareData(renderProps, networkLayer) {
+export default function prepareData(renderProps, networkLayer, preloadedRequests) {
   const queryAggregator = new IsomorphicQueryAggregator(renderProps);
 
   return IsomorphicRelay.prepareData(
@@ -9,7 +9,8 @@ export default function prepareData(renderProps, networkLayer) {
       Container: queryAggregator.Container,
       queryConfig: queryAggregator.queryConfig,
     },
-    networkLayer
+    networkLayer,
+    preloadedRequests
   ).then(({ data, props: { environment, initialReadyState } }) => ({
     data,
     props: {
