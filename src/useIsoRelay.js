@@ -1,5 +1,5 @@
 import React from 'react';
-import useRelay from 'react-router-relay';
+import useRelay from 'react-router-relay/lib';
 import IsomorphicRelayRouterContext from './IsomorphicRelayRouterContext';
 
 export default {
