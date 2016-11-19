@@ -3,7 +3,6 @@
 ## Installation
 
 ```
-npm install -g babel
 npm install
 ```
 
