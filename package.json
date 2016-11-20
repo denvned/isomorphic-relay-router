@@ -1,6 +1,6 @@
 {
   "name": "isomorphic-relay-router",
-  "version": "0.8.4",
+  "version": "0.8.6",
   "description": "Adds server side rendering support to react-router-relay",
   "author": "Denis Nedelyaev",
   "homepage": "https://github.com/denvned/isomorphic-relay",
